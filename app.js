@@ -8,14 +8,18 @@ var express = require('express')
   , http = require('http')
   , path = require('path');
 
-var azure = require('azure')
-  , nconf = require('nconf');
-nconf.env()
-     .file({ file: 'config.json'});
-var tableName = nconf.get("TABLE_NAME")
-  , partitionKey = nconf.get("PARTITION_KEY")
-  , accountName = nconf.get("STORAGE_NAME")
-  , accountKey = nconf.get("STORAGE_KEY");
+var value = process.env.CUSTOMCONNSTR_MS_AzureStorageAccountConnectionString;
+
+var str = value.split(";")
+var AccountName = str[1].split("=")[1];
+var AccountKey = str[2].split("=")[1]+"==";
+
+var azure = require('azure');
+
+var tableName = "tasks"
+  , partitionKey = "mytasks"
+  , accountName = AccountName
+  , accountKey = AccountKey;
   
 var app = express();
 
